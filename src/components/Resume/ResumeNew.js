@@ -6,19 +6,13 @@ import Particle from "../Particle";
 import pdf from "../../Assets/CV.pdf";
 import { AiOutlineDownload } from "react-icons/ai";
 import { Document, Page, pdfjs } from "react-pdf";
-import { 
-  MdNavigateNext,
-  MdNavigateBefore 
-} from "react-icons/md";
+import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
 
-
-
 function ResumeNew() {
-
-  const [width, setWidth] = useState(1200);
+  const [width, setWidth] = useState(window.innerWidth); // Initialize with current window width
   const [numPages, setNumPages] = useState();
   const [pageNumber, setPageNumber] = useState(1);
   const [showButtons, setShowButtons] = useState(false);
@@ -46,8 +40,15 @@ function ResumeNew() {
   const handleMouseLeave = () => {
     setShowButtons(false);
   };
+
   useEffect(() => {
-    setWidth(window.innerWidth);
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize); // Update width on resize
+
+    return () => window.removeEventListener('resize', handleResize); // Cleanup
   }, []);
 
   return (
@@ -55,41 +56,41 @@ function ResumeNew() {
       <Container fluid className="resume-section">
         <Particle />
 
-      <Row className="resume">
-        <div className="pdf-viewer-container">
-        <Document 
-        file={pdf} 
-        onLoadSuccess={onDocumentLoadSuccess} 
-        className="d-flex justify-content-center"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        >
-          <div className="pdf-page-wrapper">
-            <Page 
-            pageNumber={pageNumber} 
-            renderAnnotationLayer={false}
-            renderTextLayer={false} 
-            scale={width > 786 ? 1 : 0.6} />
-            { showButtons && (<div className="button-container">
-              <ButtonGroup className="buttonGroup" aria-label="controls button">
-              <Button variant='light'  className="rounded-0" onClick={goToPreviousPage} disabled={pageNumber <= 1}>
-                  <MdNavigateBefore className="navigatetoggle"/> 
-                </Button>
-                <Button variant='light'  disabled className="controlbutton">
-                {pageNumber} of {numPages}
-                </Button>
-              <Button variant='light' className="rounded-0" onClick={goToNextPage} disabled={pageNumber >= numPages}>
-                <MdNavigateNext className="navigatetoggle"/>  
-              </Button>
-            </ButtonGroup>
-            </div>) }
+        <Row className="resume">
+          <div className="pdf-viewer-container">
+            <Document
+              file={pdf}
+              onLoadSuccess={onDocumentLoadSuccess}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Page
+                pageNumber={pageNumber}
+                renderAnnotationLayer={false}
+                renderTextLayer={false}
+                scale={width > 768 ? 1 : width > 425 ? 0.55 : 0.5} // Adjust scale based on width
+              />
+              {showButtons && (
+                <div className="button-container">
+                  <ButtonGroup className="buttonGroup" aria-label="controls button">
+                    <Button variant='light' className="rounded-0" onClick={goToPreviousPage} disabled={pageNumber <= 1}>
+                      <MdNavigateBefore className="navigatetoggle" />
+                    </Button>
+                    <Button variant='light' disabled className="controlbutton">
+                      {pageNumber} of {numPages}
+                    </Button>
+                    <Button variant='light' className="rounded-0" onClick={goToNextPage} disabled={pageNumber >= numPages}>
+                      <MdNavigateNext className="navigatetoggle" />
+                    </Button>
+                  </ButtonGroup>
+                </div>
+              )}
+            </Document>
           </div>
-          </Document>
-        </div>   
         </Row>
-        
-        <Row style={{ justifyContent: "center", position: "relative" }}>
-          <style type="text/css">
+
+        <Row style={{ justifyContent: "center", position: "relative" }} className="buttonbottom">
+        <style type="text/css">
             {`
             .btn-flat {
               background-color: #9AEBA3;
@@ -99,17 +100,13 @@ function ResumeNew() {
             .btn-flat:hover {
               background-color: #083a50;
             }
-
-            .btn-xxl {
-              padding: 1rem 1rem;
-              font-size: 1.2rem;
-            }
+      
             `}
-          </style>
+          </style>   
           <Button
             variant="flat"
-            size="xxl"
-            style={{ maxWidth: "250px"}}
+            size="md" // Use Bootstrap's lg size for larger buttons
+            style={{ maxWidth: "200px", marginTop: "10px" }} // Add margin for spacing
             href={pdf}
             target="_blank"
           >
