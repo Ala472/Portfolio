@@ -4,7 +4,7 @@ import myImg from "../../Assets/photo.jpg";
 
 function HomeSecondSection() {
   return (
-        <Container className="home-content-seconde" id="home">
+        <Container className="home-content-seconde">
         <Row className="parent">
           <Col md={5} className="myAvtar">
               <img src={myImg} className="photo" alt="avatar" />
