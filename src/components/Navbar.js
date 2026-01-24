@@ -34,9 +34,9 @@ function NavBar() {
     >
       <Container>
         <Navbar.Brand className="d-flex">
-          <Link as={Link} to="/Portfolio" onClick={() => updateExpanded(false)}> 
+          <Nav.Link as={Link} to="/" onClick={() => updateExpanded(false)}> 
             <img src={logo} className="logo" alt="brand" />
-          </Link>
+          </Nav.Link>
         </Navbar.Brand>
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
