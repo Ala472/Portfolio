@@ -34,7 +34,7 @@ function NavBar() {
     >
       <Container>
         <Navbar.Brand className="d-flex">
-          <Link as={Link} to="/" onClick={() => updateExpanded(false)}> 
+          <Link as={Link} to="/Portfolio" onClick={() => updateExpanded(false)}> 
             <img src={logo} className="logo" alt="brand" />
           </Link>
         </Navbar.Brand>
